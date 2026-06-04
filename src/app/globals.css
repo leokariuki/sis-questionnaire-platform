@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: theme("colors.background");
+  color: theme("colors.on-background");
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer components {
+  /* Glassmorphic floating layer — DESIGN.md §Elevation. */
+  .glass {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .card {
+    @apply rounded-md bg-surface-container-lowest shadow-ambient;
+  }
+
+  /* Pill primary button with tactile press (spec §Components). */
+  .btn-primary {
+    @apply inline-flex min-h-[56px] items-center justify-center gap-2 rounded-full px-8
+           font-head text-body-lg font-semibold text-on-primary shadow-ambient
+           transition-all duration-150 active:translate-y-[2px] active:shadow-none
+           disabled:cursor-not-allowed disabled:opacity-40;
+    background-image: linear-gradient(to bottom, #8961bf, #7047a4);
+  }
+
+  .btn-secondary {
+    @apply inline-flex min-h-[56px] items-center justify-center gap-2 rounded-full border-2
+           border-primary bg-white px-8 font-head text-body-lg font-semibold text-primary
+           shadow-ambient transition-all duration-150 active:translate-y-[2px] active:shadow-none
+           disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-ghost {
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-5
+           font-head text-body-md font-semibold text-on-surface-variant transition-colors
+           hover:bg-surface-container disabled:opacity-40;
+  }
+}
+
+/* Respect reduced motion for accessibility. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

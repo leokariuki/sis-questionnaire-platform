@@ -1,0 +1,18 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env*.local
+.data
+*.log
+.DS_Store
+next-env.d.ts
+.vercel
+
+# Build artifacts
+spa-dist
+*.tsbuildinfo
+
+# Local editor / tooling config
+.claude

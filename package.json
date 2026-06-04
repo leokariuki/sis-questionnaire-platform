@@ -1,0 +1,39 @@
+{
+  "name": "sis-questionnaire-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SIS Questionnaire & Impact Reporting Platform — schema-driven questionnaires, scoring, personalization, PDF reports, and admin analytics for the Leysin American School Summer Experience.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "build:spa": "vite build",
+    "preview:spa": "vite preview",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-pdf/renderer": "^3.4.4",
+    "framer-motion": "^11.3.19",
+    "next": "14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.1",
+    "zod": "^3.23.8"
+  },
+  "optionalDependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "googleapis": "^140.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.21"
+  }
+}
