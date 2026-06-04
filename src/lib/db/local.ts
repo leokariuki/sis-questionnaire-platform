@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import os from "os";
 import path from "path";
 import type { ResponseRecord } from "@/lib/types";
 import type { DataStore } from "./store";
@@ -7,8 +8,17 @@ import type { DataStore } from "./store";
  * File-based store for local development (no credentials required).
  * Persists to .data/responses.json. Not for production scale — swap in
  * the Supabase adapter by setting the Supabase env vars.
+ *
+ * On serverless hosts (e.g. Vercel) the project filesystem is read-only, so
+ * we fall back to the OS temp dir. NOTE: temp storage is ephemeral and may be
+ * wiped between invocations — fine for a live demo, but set the Supabase env
+ * vars for any real/persistent deployment.
  */
-const DATA_DIR = path.join(process.cwd(), ".data");
+const DATA_DIR =
+  process.env.DATA_DIR ||
+  (process.env.VERCEL
+    ? path.join(os.tmpdir(), "sis-data")
+    : path.join(process.cwd(), ".data"));
 const DATA_FILE = path.join(DATA_DIR, "responses.json");
 
 async function readAll(): Promise<ResponseRecord[]> {

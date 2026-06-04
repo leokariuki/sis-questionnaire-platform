@@ -1,5 +1,7 @@
 # SIS Questionnaire & Impact Reporting Platform
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fleokariuki%2Fsis-questionnaire-platform&env=ADMIN_TOKEN&envDescription=Token%20that%20protects%20the%20%2Fadmin%20dashboard)
+
 A production-ready, schema-driven platform for the **Leysin American School Summer
 Experience**. Students complete a friendly, one-question-per-screen questionnaire;
 the system scores seven competencies, generates a personalized PDF "SIS Skills
@@ -33,6 +35,18 @@ npm run dev                      # http://localhost:3000
 
 - Pilot questionnaire: `/q/pre-teens-13-17`
 - Iframe/WordPress entry: `/embed/pre-teens-13-17`
+
+## Deploy to Vercel
+
+1. Click the **Deploy with Vercel** button above (or import the repo at
+   [vercel.com/new](https://vercel.com/new)).
+2. Set the **`ADMIN_TOKEN`** environment variable (protects `/admin`).
+3. Deploy — Vercel auto-detects Next.js; no extra config required.
+
+> ⚠️ **Demo persistence:** the default file store writes responses to the OS temp
+> directory on Vercel, which is **ephemeral** (submissions may not persist between
+> invocations). This is fine for a live demo/portfolio. For real persistence, set the
+> Supabase env vars (see [`.env.example`](.env.example)) to switch to the Postgres store.
 - Adviser dashboard: `/admin` (sign in with `ADMIN_TOKEN`)
 
 With **no** environment variables beyond `ADMIN_TOKEN`, the app runs entirely on a
