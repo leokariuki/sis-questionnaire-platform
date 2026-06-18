@@ -3,6 +3,7 @@
 import type { AgeGroup, Step } from "@/lib/types";
 import { COMPETENCY_BY_ID } from "@/config/competencies";
 import { ANSWER_SCALE, SCALE_INTRO } from "@/config/scale";
+import { itemWording, applyScale } from "@/lib/content";
 import { ScaleSelector } from "@/components/ui/ScaleSelector";
 import { OptionList } from "@/components/ui/OptionList";
 import { CompetencyImage } from "@/components/ui/CompetencyImage";
@@ -164,7 +165,11 @@ export function renderStep(step: Step, ctrl: QuestionnaireController, ageGroup: 
     case "competency": {
       const c = COMPETENCY_BY_ID[step.competencyId];
       return (
-        <ScreenFrame icon={c.icon} title={step.item.wording[ageGroup]} color={c.color}>
+        <ScreenFrame
+          icon={c.icon}
+          title={itemWording(step.item.code, ageGroup, step.item.wording[ageGroup])}
+          color={c.color}
+        >
           <CompetencyImage
             competencyId={step.competencyId}
             code={step.item.code}
@@ -172,7 +177,7 @@ export function renderStep(step: Step, ctrl: QuestionnaireController, ageGroup: 
             ageGroup={ageGroup}
           />
           <ScaleSelector
-            options={ANSWER_SCALE}
+            options={applyScale(ANSWER_SCALE)}
             value={ctrl.getAnswer(step.item.code) as number | undefined}
             onSelect={(v) => ctrl.setAnswer(step.item.code, v)}
             color={c.color}
@@ -185,7 +190,7 @@ export function renderStep(step: Step, ctrl: QuestionnaireController, ageGroup: 
       return (
         <ScreenFrame icon="🚀" title={step.question.wording[ageGroup]}>
           <ScaleSelector
-            options={ANSWER_SCALE}
+            options={applyScale(ANSWER_SCALE)}
             value={ctrl.getAnswer(step.question.dbField) as number | undefined}
             onSelect={(v) => ctrl.setAnswer(step.question.dbField, v)}
           />
