@@ -18,7 +18,7 @@ export function RadarChart({ scores, size = 280 }: { scores: ScoreResult; size?:
 
   // Grid rings for values 1..5.
   const rings = [1, 2, 3, 4, 5].map((v) => {
-    const r = (v / 5) * R;
+    const r = (v / 6) * R;
     const pts = COMPETENCIES.map((_, i) => {
       const p = point(i, r);
       return `${p.x},${p.y}`;
@@ -29,7 +29,7 @@ export function RadarChart({ scores, size = 280 }: { scores: ScoreResult; size?:
   // Data polygon.
   const dataPts = COMPETENCIES.map((c, i) => {
     const val = scores.byCompetency[c.id as CompetencyId] || 0;
-    const p = point(i, (val / 5) * R);
+    const p = point(i, (val / 6) * R);
     return `${p.x},${p.y}`;
   }).join(" ");
 
@@ -45,7 +45,7 @@ export function RadarChart({ scores, size = 280 }: { scores: ScoreResult; size?:
       <Polygon points={dataPts} fill="#7047a4" fillOpacity={0.22} stroke="#7047a4" strokeWidth={2} />
       {COMPETENCIES.map((c, i) => {
         const val = scores.byCompetency[c.id as CompetencyId] || 0;
-        const p = point(i, (val / 5) * R);
+        const p = point(i, (val / 6) * R);
         return <Circle key={c.id} cx={p.x} cy={p.y} r={3} fill={c.color} />;
       })}
       {COMPETENCIES.map((c, i) => {
@@ -78,7 +78,7 @@ export function ScoreBars({ scores, width = 360 }: { scores: ScoreResult; width?
       {COMPETENCIES.map((c, i) => {
         const val = scores.byCompetency[c.id as CompetencyId] || 0;
         const y = i * rowH + 4;
-        const w = (val / 5) * barMax;
+        const w = (val / 6) * barMax;
         return (
           <React.Fragment key={c.id}>
             <SvgText x={0} y={y + 13} style={{ fontSize: 8, fill: "#161a32" }}>

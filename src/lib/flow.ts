@@ -22,7 +22,6 @@ export function buildSteps(def: QuestionnaireDefinition): Step[] {
   const steps: Step[] = [
     { type: "intro", id: "intro" },
     { type: "code", id: "code" },
-    { type: "scale-intro", id: "scale-intro" },
   ];
 
   if (def.includesBackground) {

@@ -7,6 +7,7 @@ import { calculateScores } from "@/lib/scoring";
 import { checkCompleteness } from "@/lib/quality";
 import { getStore } from "@/lib/db";
 import { syncToSheetSafe } from "@/lib/sheets";
+import { syncToWebhookSafe } from "@/lib/webhook";
 
 export type SubmitOutcome =
   | { ok: true; record: ResponseRecord; duplicate: boolean }
@@ -66,7 +67,11 @@ export async function submitResponse(payload: SubmissionPayload): Promise<Submit
   await store.create(record);
 
   // Best-effort Google Sheets mirror (never blocks submission).
+  // Two interchangeable backends: service-account API (syncToSheetSafe) and
+  // the billing-free Apps Script webhook (syncToWebhookSafe). Whichever is
+  // configured via env vars runs; both are no-ops when unconfigured.
   await syncToSheetSafe(record);
+  await syncToWebhookSafe(record);
 
   return { ok: true, record, duplicate: Boolean(existing) };
 }

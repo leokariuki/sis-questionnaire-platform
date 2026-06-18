@@ -2,6 +2,7 @@ import type { AnswerMap, QuestionnaireDefinition } from "@/lib/types";
 import { parseCode, describeCode } from "@/lib/code";
 import { calculateScores, scoreBand } from "@/lib/scoring";
 import { buildPreReport } from "@/lib/personalization";
+import { CreditLine } from "@/components/ui/CreditLine";
 import { RadarChartWeb, ScoreBarsWeb } from "./Charts";
 
 /**
@@ -40,9 +41,6 @@ export function ReportView({
               Start again
             </button>
           )}
-          <button onClick={() => window.print()} className="btn-primary min-h-[44px] px-5 text-body-md">
-            📄 Save as PDF
-          </button>
         </div>
       </div>
 
@@ -78,7 +76,7 @@ export function ReportView({
             <ScoreBarsWeb scores={scores} />
           </div>
           <p className="mt-stack-sm font-body text-body-md text-on-surface-variant">
-            Overall, your answers place you in the “{overallBand}” range ({scores.overall.toFixed(2)} / 5.00). This is a
+            Overall, your answers place you in the “{overallBand}” range ({scores.overall.toFixed(2)} / 6.00). This is a
             snapshot to build on during the summer.
           </p>
         </section>
@@ -88,7 +86,7 @@ export function ReportView({
           <h2 className="mb-stack-sm font-head text-headline-md text-on-surface">Your strongest skills</h2>
           <div className="grid gap-stack-sm sm:grid-cols-2">
             {content.strengths.map((a) => (
-              <AreaCard key={a.competencyId} color={a.color} title={`${a.label} — ${a.score.toFixed(2)} / 5.00`} band={a.band} blurb={a.blurb} />
+              <AreaCard key={a.competencyId} color={a.color} title={`${a.label} — ${a.score.toFixed(2)} / 6.00`} band={a.band} blurb={a.blurb} />
             ))}
           </div>
         </section>
@@ -98,7 +96,7 @@ export function ReportView({
           <h2 className="mb-stack-sm font-head text-headline-md text-on-surface">Skills to practice during SIS</h2>
           <div className="grid gap-stack-sm sm:grid-cols-2">
             {content.developing.map((a) => (
-              <AreaCard key={a.competencyId} color={a.color} title={`${a.label} — ${a.score.toFixed(2)} / 5.00`} band={a.band} blurb={a.blurb} />
+              <AreaCard key={a.competencyId} color={a.color} title={`${a.label} — ${a.score.toFixed(2)} / 6.00`} band={a.band} blurb={a.blurb} />
             ))}
           </div>
         </section>
@@ -144,6 +142,7 @@ export function ReportView({
         <p className="mt-stack-lg border-t border-outline-variant pt-stack-sm text-center font-body text-body-md text-on-surface-variant">
           SIS Skills Profile · Private to the student and their advisers · No names or ages are collected.
         </p>
+        <CreditLine className="mt-stack-sm" />
       </div>
     </div>
   );

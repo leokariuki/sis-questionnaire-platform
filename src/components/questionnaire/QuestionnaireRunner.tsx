@@ -40,6 +40,8 @@ export interface QuestionnaireRunnerProps {
   onSubmit?: (input: SubmitInput) => Promise<{ ok: true; result: CompleteResult } | { ok: false; error: string }>;
   /** Custom completion UI. Defaults to the link-based CompletionScreen. */
   renderComplete?: (result: CompleteResult, restart: () => void) => React.ReactNode;
+  /** Pre-fill the student code (from a personalised ?code= link). */
+  initialCode?: string;
 }
 
 async function defaultSubmit(
@@ -62,8 +64,8 @@ async function defaultSubmit(
   }
 }
 
-export function QuestionnaireRunner({ def, onSubmit, renderComplete }: QuestionnaireRunnerProps) {
-  const ctrl = useQuestionnaire(def);
+export function QuestionnaireRunner({ def, onSubmit, renderComplete, initialCode }: QuestionnaireRunnerProps) {
+  const ctrl = useQuestionnaire(def, initialCode);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CompleteResult | null>(null);

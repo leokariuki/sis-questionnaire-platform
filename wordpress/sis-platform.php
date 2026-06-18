@@ -23,6 +23,8 @@ class SIS_Platform {
     const DB_VERSION   = '1';
     const OPT_DBVER    = 'sis_db_version';
     const OPT_SUBMIT   = 'sis_submit_key';   // optional shared key to deter spam
+    const OPT_SHEET_URL   = 'sis_sheets_webhook_url';    // Apps Script Web App /exec URL
+    const OPT_SHEET_TOKEN = 'sis_sheets_webhook_token';  // shared secret (matches Apps Script SHARED_TOKEN)
     const REST_NS      = 'sis/v1';
 
     /** Questionnaire registry (mirror of src/config/questionnaires). */
@@ -182,7 +184,50 @@ class SIS_Platform {
             return new WP_REST_Response(['message' => 'Could not save response.'], 500);
         }
 
+        // Best-effort mirror to Google Sheets (never blocks the submission).
+        self::sync_to_sheet($meta['sheet'], $payload);
+
         return new WP_REST_Response(['id' => $id, 'duplicate' => $duplicate], 201);
+    }
+
+    /**
+     * Mirror a submission into the Google Sheet via the Apps Script Web App.
+     * Activated when both the URL and token options are set. The Apps Script
+     * appends the ordered 73-column row to the tab named after the sheet
+     * (e.g. PRE_TEENS_13_17), creating the tab + header on first use.
+     * Failures are logged and swallowed so a sync issue never breaks intake.
+     */
+    public static function sync_to_sheet(string $sheet, array $payload): void {
+        $url   = (string) get_option(self::OPT_SHEET_URL, '');
+        $token = (string) get_option(self::OPT_SHEET_TOKEN, '');
+        if ($url === '' || $token === '') {
+            return; // sync not configured
+        }
+
+        $headers = self::column_headers();
+        $row     = self::record_to_row($payload, $headers);
+
+        $res = wp_remote_post($url, [
+            'timeout'     => 15,
+            'redirection' => 0, // a 302 -> googleusercontent IS the success signal
+            'headers'     => ['Content-Type' => 'application/json'],
+            'body'        => wp_json_encode([
+                'token'   => $token,
+                'tab'     => $sheet,
+                'headers' => $headers,
+                'row'     => $row,
+            ]),
+        ]);
+
+        if (is_wp_error($res)) {
+            error_log('[sis] sheet sync failed: ' . $res->get_error_message());
+            return;
+        }
+        $status = (int) wp_remote_retrieve_response_code($res);
+        // 200 = direct JSON; 302 = Apps Script redirect after a successful append.
+        if ($status !== 200 && $status !== 302) {
+            error_log('[sis] sheet sync unexpected status ' . $status);
+        }
     }
 
     /** ── Admin ────────────────────────────────────────────── */

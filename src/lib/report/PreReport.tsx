@@ -70,7 +70,7 @@ export function PreReportDocument({
             <ScoreBars scores={record.scores} width={300} />
           </View>
           <Text style={{ fontSize: 9, color: "#4b4451", marginTop: 4 }}>
-            Overall, your answers place you in the “{overallBand}” range ({record.scores.overall.toFixed(2)} / 5.00).
+            Overall, your answers place you in the “{overallBand}” range ({record.scores.overall.toFixed(2)} / 6.00).
             This is a snapshot to build on during the summer.
           </Text>
         </View>
@@ -83,7 +83,7 @@ export function PreReportDocument({
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Swatch color={a.color} />
                 <Text style={s.areaTitle}>
-                  {a.label} — {a.score.toFixed(2)} / 5.00
+                  {a.label} — {a.score.toFixed(2)} / 6.00
                 </Text>
               </View>
               <Text style={s.band}>{a.band}</Text>
@@ -100,7 +100,7 @@ export function PreReportDocument({
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Swatch color={a.color} />
                 <Text style={s.areaTitle}>
-                  {a.label} — {a.score.toFixed(2)} / 5.00
+                  {a.label} — {a.score.toFixed(2)} / 6.00
                 </Text>
               </View>
               <Text style={s.band}>{a.band}</Text>

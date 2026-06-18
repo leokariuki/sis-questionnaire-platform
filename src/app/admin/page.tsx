@@ -130,7 +130,7 @@ export default function AdminPage() {
               <div className="h-3 flex-1 overflow-hidden rounded-full bg-surface-container-high">
                 <div
                   className="h-full rounded-full"
-                  style={{ width: `${(c.average / 5) * 100}%`, backgroundColor: c.color }}
+                  style={{ width: `${(c.average / 6) * 100}%`, backgroundColor: c.color }}
                 />
               </div>
               <span className="w-12 text-right font-head text-label-bold">{c.average ? c.average.toFixed(2) : "—"}</span>

@@ -1,12 +1,16 @@
 import type { ScaleOption } from "@/lib/types";
 
-/** The shared 1–5 competency / transfer scale (spec §8). */
+/** Maximum value on the competency / transfer scale. */
+export const SCALE_MAX = 6;
+
+/** The shared 1–6 competency / transfer scale (spec §8). */
 export const ANSWER_SCALE: ScaleOption[] = [
   { value: 1, label: "Not true" },
   { value: 2, label: "A little true" },
   { value: 3, label: "Sometimes true" },
   { value: 4, label: "Mostly true" },
-  { value: 5, label: "Very true" },
+  { value: 5, label: "Quite true" },
+  { value: 6, label: "Very true" },
 ];
 
 export const SCALE_INTRO = {

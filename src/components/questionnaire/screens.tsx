@@ -6,6 +6,7 @@ import { ANSWER_SCALE, SCALE_INTRO } from "@/config/scale";
 import { ScaleSelector } from "@/components/ui/ScaleSelector";
 import { OptionList } from "@/components/ui/OptionList";
 import { CompetencyImage } from "@/components/ui/CompetencyImage";
+import { CreditLine } from "@/components/ui/CreditLine";
 import type { QuestionnaireController } from "@/hooks/useQuestionnaire";
 
 /** Shared screen frame: icon chip, title, optional helper, then content. */
@@ -63,6 +64,7 @@ export function renderStep(step: Step, ctrl: QuestionnaireController, ageGroup: 
               </li>
             ))}
           </ul>
+          <CreditLine className="mt-stack-md border-t border-outline-variant pt-stack-sm" />
         </ScreenFrame>
       );
 

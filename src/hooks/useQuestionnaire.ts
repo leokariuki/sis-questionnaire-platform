@@ -21,7 +21,7 @@ function draftKey(id: string): string {
  * Draft state is persisted to localStorage so a student can close the tab
  * and return to exactly where they were (spec §6 resume capability).
  */
-export function useQuestionnaire(def: QuestionnaireDefinition) {
+export function useQuestionnaire(def: QuestionnaireDefinition, initialCode?: string) {
   const steps = useMemo<Step[]>(() => buildSteps(def), [def]);
   const answerableSteps = useMemo(() => steps.filter(isAnswerableStep), [steps]);
 
@@ -34,12 +34,14 @@ export function useQuestionnaire(def: QuestionnaireDefinition) {
 
   // Hydrate from saved draft on mount.
   useEffect(() => {
+    let draftCode = "";
     try {
       const raw = localStorage.getItem(draftKey(def.id));
       if (raw) {
         const d = JSON.parse(raw) as DraftState;
         setAnswers(d.answers ?? {});
-        setCode(d.code ?? "");
+        draftCode = d.code ?? "";
+        setCode(draftCode);
         setIndex(Math.min(d.index ?? 0, steps.length - 1));
         if ((d.answers && Object.keys(d.answers).length > 0) || d.index > 0) {
           setResumed(true);
@@ -47,6 +49,12 @@ export function useQuestionnaire(def: QuestionnaireDefinition) {
       }
     } catch {
       /* ignore corrupt draft */
+    }
+    // Pre-fill from a personalised link (?code=ABCD12) when no draft code exists,
+    // so emailed links open the questionnaire with the student's code already set.
+    if (!draftCode && initialCode) {
+      const normalized = initialCode.trim().toUpperCase();
+      if (isValidCodeFormat(normalized)) setCode(normalized);
     }
     setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -36,9 +36,16 @@ function resolveConfig(): SisConfig {
   };
 }
 
+/** Read a pre-filled student code from a personalised link (?code=ABCD12). */
+function codeFromUrl(): string | undefined {
+  const c = new URLSearchParams(window.location.search).get("code");
+  return c ? c.trim().toUpperCase() : undefined;
+}
+
 export function App() {
   const config = resolveConfig();
   const def = getQuestionnaire(config.questionnaireId);
+  const initialCode = codeFromUrl();
   const [preScores, setPreScores] = useState<ScoreResult | null>(null);
   const [matched, setMatched] = useState(false);
 
@@ -99,6 +106,7 @@ export function App() {
     <QuestionnaireRunner
       def={def}
       onSubmit={handleSubmit}
+      initialCode={initialCode}
       renderComplete={(result, restart) =>
         def.type === "POST" ? (
           <PostReportView

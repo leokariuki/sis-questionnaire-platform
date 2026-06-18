@@ -1,6 +1,7 @@
 import type { AnswerMap, QuestionnaireDefinition, ScoreResult } from "@/lib/types";
 import { parseCode, describeCode } from "@/lib/code";
 import { buildPostReportFromScores } from "@/lib/personalization";
+import { CreditLine } from "@/components/ui/CreditLine";
 
 /**
  * Printable POST "SIS Skills Profile" with pre→post comparison (spec §14, §27).
@@ -38,9 +39,6 @@ export function PostReportView({
               Start again
             </button>
           )}
-          <button onClick={() => window.print()} className="btn-primary min-h-[44px] px-5 text-body-md">
-            📄 Save as PDF
-          </button>
         </div>
       </div>
 
@@ -80,11 +78,11 @@ export function PostReportView({
                 <div className="flex-1">
                   {matched && (
                     <div className="mb-1 h-2.5 overflow-hidden rounded-full bg-surface-container-high">
-                      <div className="h-full rounded-full opacity-40" style={{ width: `${(ch.pre / 5) * 100}%`, backgroundColor: ch.color }} />
+                      <div className="h-full rounded-full opacity-40" style={{ width: `${(ch.pre / 6) * 100}%`, backgroundColor: ch.color }} />
                     </div>
                   )}
                   <div className="h-2.5 overflow-hidden rounded-full bg-surface-container-high">
-                    <div className="h-full rounded-full" style={{ width: `${(ch.post / 5) * 100}%`, backgroundColor: ch.color }} />
+                    <div className="h-full rounded-full" style={{ width: `${(ch.post / 6) * 100}%`, backgroundColor: ch.color }} />
                   </div>
                 </div>
                 <span className="w-20 text-right font-head text-label-bold text-on-surface-variant">
@@ -129,7 +127,7 @@ export function PostReportView({
                 <div className="flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full" style={{ backgroundColor: ch.color }} />
                   <span className="font-head text-body-lg font-semibold text-on-surface">
-                    {ch.label} — {ch.post.toFixed(2)} / 5.00
+                    {ch.label} — {ch.post.toFixed(2)} / 6.00
                   </span>
                 </div>
                 <p className="mt-2 font-body text-body-md text-on-surface">This is one of your standout strengths — keep using it.</p>
@@ -173,6 +171,7 @@ export function PostReportView({
         <p className="mt-stack-lg border-t border-outline-variant pt-stack-sm text-center font-body text-body-md text-on-surface-variant">
           SIS Skills Profile · Private to the student and their advisers · No names or ages are collected.
         </p>
+        <CreditLine className="mt-stack-sm" />
       </div>
     </div>
   );

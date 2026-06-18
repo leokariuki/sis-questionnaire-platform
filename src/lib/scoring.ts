@@ -3,7 +3,7 @@ import { COMPETENCIES, competencyItemCodes, COMPETENCY_BY_ID } from "@/config/co
 
 /**
  * Scoring system (spec §12).
- *   competency score = average of its 6 items (1.00–5.00)
+ *   competency score = average of its 6 items (1.00–6.00)
  *   overall          = average of the 7 competency scores
  */
 
@@ -16,7 +16,7 @@ export function competencyScore(answers: AnswerMap, competencyId: CompetencyId):
   const codes = competencyItemCodes(COMPETENCY_BY_ID[competencyId]);
   const values = codes
     .map((code) => answers[code])
-    .filter((v): v is number => typeof v === "number" && v >= 1 && v <= 5);
+    .filter((v): v is number => typeof v === "number" && v >= 1 && v <= 6);
   if (values.length === 0) return 0;
   return round2(values.reduce((a, b) => a + b, 0) / values.length);
 }
@@ -31,11 +31,11 @@ export function calculateScores(answers: AnswerMap): ScoreResult {
   return { byCompetency, overall };
 }
 
-/** Positive interpretation bands (spec §12). */
+/** Positive interpretation bands (spec §12), scaled to the 1–6 answer scale. */
 export function scoreBand(score: number): ScoreBand {
-  if (score <= 2.0) return "Emerging";
-  if (score <= 3.0) return "Developing";
-  if (score <= 4.0) return "Strengthening";
+  if (score <= 2.4) return "Emerging";
+  if (score <= 3.6) return "Developing";
+  if (score <= 4.8) return "Strengthening";
   return "Strong";
 }
 
