@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { ParsedCode } from "@/lib/types";
+import { codeName } from "@/lib/content";
 
 /**
  * Student code system (spec §5). Format: ABCD12
@@ -68,13 +69,16 @@ export function parseCode(raw: string): ParsedCode {
   };
 }
 
-/** Human-readable expansion of a parsed code (for admin / reports). */
+/** Human-readable expansion of a parsed code (for admin / reports).
+ *  Default names can be overridden by the "Codes" section of the editable
+ *  Google Sheet (lib/content.ts), so the team can set the real dorm/club/
+ *  family names without code changes. */
 export function describeCode(code: ParsedCode) {
   return {
-    dorm: DORM_GROUPS[code.dormGroup] ?? `Unknown (${code.dormGroup})`,
-    morningTrack: MORNING_TRACKS[code.morningTrack] ?? `Unknown (${code.morningTrack})`,
-    afternoonClub: AFTERNOON_CLUBS[code.afternoonClub] ?? `Unknown (${code.afternoonClub})`,
-    familyGroup: FAMILY_GROUPS[code.familyGroup] ?? `Unknown (${code.familyGroup})`,
+    dorm: codeName("dorm", code.dormGroup, DORM_GROUPS[code.dormGroup] ?? `Unknown (${code.dormGroup})`),
+    morningTrack: codeName("track", code.morningTrack, MORNING_TRACKS[code.morningTrack] ?? `Unknown (${code.morningTrack})`),
+    afternoonClub: codeName("club", code.afternoonClub, AFTERNOON_CLUBS[code.afternoonClub] ?? `Unknown (${code.afternoonClub})`),
+    familyGroup: codeName("family", code.familyGroup, FAMILY_GROUPS[code.familyGroup] ?? `Unknown (${code.familyGroup})`),
     studentNumber: code.studentNumber,
   };
 }

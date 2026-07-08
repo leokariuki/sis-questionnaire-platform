@@ -17,9 +17,11 @@ interface ContentOverrides {
   items: Record<string, Partial<Record<AgeGroup, string>>>;
   /** Answer-scale labels, keyed by the numeric value (1–6). */
   scale: Record<string, string>;
+  /** Code-legend names: { dorm|track|club|family: { LETTER: name } }. */
+  codes: Record<string, Record<string, string>>;
 }
 
-let CONTENT: ContentOverrides = { items: {}, scale: {} };
+let CONTENT: ContentOverrides = { items: {}, scale: {}, codes: {} };
 
 /** Install overrides fetched from the WordPress `/sis/v1/content` endpoint. */
 export function setContent(data: unknown): void {
@@ -28,7 +30,14 @@ export function setContent(data: unknown): void {
   CONTENT = {
     items: d.items && typeof d.items === "object" ? (d.items as ContentOverrides["items"]) : {},
     scale: d.scale && typeof d.scale === "object" ? (d.scale as ContentOverrides["scale"]) : {},
+    codes: d.codes && typeof d.codes === "object" ? (d.codes as ContentOverrides["codes"]) : {},
   };
+}
+
+/** Team-edited name for a code letter (dorm/track/club/family), or the default. */
+export function codeName(kind: "dorm" | "track" | "club" | "family", letter: string, fallback: string): string {
+  const v = CONTENT.codes[kind]?.[letter];
+  return v && v.trim() ? v : fallback;
 }
 
 /** Overridden wording for an item, or the built-in default. */

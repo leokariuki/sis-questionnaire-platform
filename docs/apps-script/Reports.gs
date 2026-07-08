@@ -15,12 +15,15 @@
  *   4. Backfill all existing reports by calling repeatedly until done:true:
  *        /wp-json/sis/v1/report-sync?key=<submit_key>&offset=0&max=10
  *
- * The "SIS Reports" folder is created in the Drive of the Google account
- * that deploys this script. Share that folder with the team.
+* IMPORTANT: deploy this script from a Google account that has EDITOR
+ * access to the "SIS Reports" folder above (ideally bienesdar.ong@gmail.com,
+ * which owns it). New PDFs then appear in that folder automatically.
  */
 
 var SHARED_TOKEN = 'CHANGE-ME-LONG-RANDOM-SECRET';
-var ROOT_FOLDER  = 'SIS Reports';
+// The shared "SIS Reports" folder (owned by bienesdar.ong@gmail.com):
+// https://drive.google.com/drive/folders/1deID8fXGWVQlGfMSQENKrP-IAHBcCXa9
+var ROOT_FOLDER_ID = '1deID8fXGWVQlGfMSQENKrP-IAHBcCXa9';
 
 function doPost(e) {
   var out;
@@ -46,7 +49,7 @@ function folderIn(parent, name) {
 }
 
 function makeReportPdf(d) {
-  var root = folderIn(DriveApp.getRootFolder(), ROOT_FOLDER);
+  var root = DriveApp.getFolderById(ROOT_FOLDER_ID);
   var folder = folderIn(root, d.sheet);
 
   var stamp = String(d.created || '').replace(/[^0-9]/g, '').slice(0, 12);
