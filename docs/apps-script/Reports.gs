@@ -33,6 +33,8 @@ function doPost(e) {
       out = { ok: false, error: 'bad token' };
     } else if (d.kind === 'report') {
       out = { ok: true, url: makeReportPdf(d) };
+    } else if (d.kind === 'cleanup') {
+      out = { ok: true, trashed: cleanupAll() };
     } else {
       out = { ok: false, error: 'unknown kind' };
     }
@@ -52,8 +54,11 @@ function makeReportPdf(d) {
   var root = DriveApp.getFolderById(ROOT_FOLDER_ID);
   var folder = folderIn(root, d.sheet);
 
-  var stamp = String(d.created || '').replace(/[^0-9]/g, '').slice(0, 12);
-  var name = d.code + '_' + stamp + '.pdf';
+  // Clean, readable filename: CODE_YYYY-MM-DD_HHMM.pdf
+  var iso = String(d.created || '');
+  var datePart = iso.slice(0, 10);                    // 2026-07-08
+  var timePart = iso.slice(11, 16).replace(':', '');  // 1326
+  var name = d.code + '_' + datePart + (timePart ? '_' + timePart : '') + '.pdf';
 
   // Build a temporary Google Doc, then export it as PDF.
   var doc = DocumentApp.create('tmp-' + name);
@@ -128,4 +133,21 @@ function makeReportPdf(d) {
   var pdf = folder.createFile(DriveApp.getFileById(doc.getId()).getAs('application/pdf')).setName(name);
   DriveApp.getFileById(doc.getId()).setTrashed(true);
   return pdf.getUrl();
+}
+
+/** One-time: trash every existing PDF in the SIS Reports folder + sub-folders. */
+function cleanupAll() {
+  var root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+  var count = 0;
+  function trashPdfs(folder) {
+    var files = folder.getFiles();
+    while (files.hasNext()) {
+      var f = files.next();
+      if (f.getName().slice(-4).toLowerCase() === '.pdf') { f.setTrashed(true); count++; }
+    }
+  }
+  trashPdfs(root);
+  var subs = root.getFolders();
+  while (subs.hasNext()) { trashPdfs(subs.next()); }
+  return count;
 }
