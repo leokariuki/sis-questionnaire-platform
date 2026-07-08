@@ -20,7 +20,7 @@
  * which owns it). New PDFs then appear in that folder automatically.
  */
 
-var SHARED_TOKEN = 'CHANGE-ME-LONG-RANDOM-SECRET';
+var SHARED_TOKEN = 'a9sUapkLRXNOoU4I4AhdX1o3Ld1Q10Sxt0yJK0ta';
 // The shared "SIS Reports" folder (owned by bienesdar.ong@gmail.com):
 // https://drive.google.com/drive/folders/1deID8fXGWVQlGfMSQENKrP-IAHBcCXa9
 var ROOT_FOLDER_ID = '1deID8fXGWVQlGfMSQENKrP-IAHBcCXa9';
